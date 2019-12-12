@@ -223,16 +223,41 @@ class Tetris:
         return sum_height, max_height, min_height
 
 
-    def _get_board_props(self, board):
+    # Params with an initial _ indicate boolean to add to the result
+    def _get_board_props(self, board, _max_height, _min_height, _current_piece, _next_piece, _max_bumpiness, _lines, _holes, _total_bumpiness, _sum_height):
         '''Get properties of the board'''
         lines, board = self._clear_lines(board)
         holes = self._number_of_holes(board)
         total_bumpiness, max_bumpiness = self._bumpiness(board)
         sum_height, max_height, min_height = self._height(board)
-        return [lines, holes, total_bumpiness, sum_height]
+        current_piece = self._get_rotated_piece()
+        next_piece = self.next_piece
+        result = []
+        # Append to result
+        if _lines:
+        	result.append(lines)
+        if _holes:
+        	result.append(holes)
+        if _total_bumpiness:
+        	result.append(total_bumpiness)
+        if _sum_height:
+        	result.append(sum_height)
+        if _max_height:
+        	result.append(max_height)
+        if _min_height:
+        	result.append(min_height)
+        if _current_piece:
+        	result.append(current_piece)
+        if _next_piece:
+        	result.append(next_piece)
+        if _max_bumpiness:
+        	result.append(max_bumpiness)
+        
+        return result
 
 
-    def get_next_states(self):
+    # Keep default values
+    def get_next_states(self, _max_height = 0, _min_height = 0, _current_piece = 0, _next_piece = 0, _max_bumpiness = 0, _lines = 1, _holes = 1, _total_bumpiness = 1, _sum_height = 1):
         '''Get all possible next states'''
         states = {}
         piece_id = self.current_piece
@@ -262,7 +287,7 @@ class Tetris:
                 # Valid move
                 if pos[1] >= 0:
                     board = self._add_piece_to_board(piece, pos)
-                    states[(x, rotation)] = self._get_board_props(board)
+                    states[(x, rotation)] = self._get_board_props(board, _max_height, _min_height, _current_piece, _next_piece, _max_bumpiness, _lines, _holes, _total_bumpiness, _sum_height)
 
         return states
 
