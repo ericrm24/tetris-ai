@@ -5,7 +5,7 @@ from statistics import mean, median
 import random
 from logs import CustomTensorBoard
 from tqdm import tqdm
-        
+
 
 # Run dqn with Tetris
 def dqn():
@@ -34,9 +34,19 @@ def dqn():
     log = CustomTensorBoard(log_dir=log_dir)
 
     scores = []
+    _max_height = False
+    _min_height = False
+    _current_piece = False
+    _next_piece = False
+    _max_bumpiness = False
+    _lines = True
+    _holes = True
+    _total_bumpiness = True
+    _sum_height = True
 
     for episode in tqdm(range(episodes)):
-        current_state = env.reset()
+        current_state = env.reset(_max_height, _min_height, _current_piece, _next_piece, _max_bumpiness,
+                                  _lines, _holes, _total_bumpiness, _sum_height)
         done = False
         steps = 0
 
@@ -48,9 +58,10 @@ def dqn():
         # Game
         while not done and (not max_steps or steps < max_steps):
             # No params for default
-            next_states = env.get_next_states()
+            next_states = env.get_next_states(_max_height, _min_height, _current_piece, _next_piece, _max_bumpiness,
+                                              _lines, _holes, _total_bumpiness, _sum_height)
             best_state = agent.best_state(next_states.values())
-            
+
             best_action = None
             for action, state in next_states.items():
                 if state == best_state:
@@ -59,7 +70,7 @@ def dqn():
 
             reward, done = env.play(best_action[0], best_action[1], render=render,
                                     render_delay=render_delay)
-            
+
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
@@ -75,9 +86,10 @@ def dqn():
             avg_score = mean(scores[-log_every:])
             min_score = min(scores[-log_every:])
             max_score = max(scores[-log_every:])
+            cleared_lines = env.get_lines()
 
             log.log(episode, avg_score=avg_score, min_score=min_score,
-                    max_score=max_score)
+                    max_score=max_score, cleared_lines=cleared_lines)
 
 
 if __name__ == "__main__":
