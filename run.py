@@ -14,7 +14,7 @@ def dqn():
     max_steps = None
     epsilon_stop_episode = 1500
     mem_size = 20000
-    discount = 0.95
+    discount = 0.5
     batch_size = 512
     epochs = 1
     render_every = 50
@@ -34,15 +34,15 @@ def dqn():
     log = CustomTensorBoard(log_dir=log_dir)
 
     scores = []
-    _max_height = False
-    _min_height = False
+    _max_height = True
+    _min_height = True
     _current_piece = False
     _next_piece = False
     _max_bumpiness = False
-    _lines = True
+    _lines = False
     _holes = True
     _total_bumpiness = True
-    _sum_height = True
+    _sum_height = False
 
     for episode in tqdm(range(episodes)):
         current_state = env.reset(_max_height, _min_height, _current_piece, _next_piece, _max_bumpiness,
