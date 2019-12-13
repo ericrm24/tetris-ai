@@ -12,7 +12,7 @@ def dqn():
     env = Tetris()
     episodes = 2000
     max_steps = None
-    epsilon_stop_episode = 1000
+    epsilon_stop_episode = 500
     mem_size = 20000
     discount = 0.5
     batch_size = 512
