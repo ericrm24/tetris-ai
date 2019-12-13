@@ -14,7 +14,7 @@ def dqn():
     max_steps = None
     epsilon_stop_episode = 500
     mem_size = 20000
-    discount = 0.5
+    discount = 0.95
     batch_size = 512
     epochs = 1
     render_every = 50
